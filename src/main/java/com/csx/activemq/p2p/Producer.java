@@ -102,6 +102,6 @@ public class Producer {
 
     public static void main(String[] args) {
         Producer producer=new Producer();
-        producer.send1();
+        producer.send2();
     }
 }

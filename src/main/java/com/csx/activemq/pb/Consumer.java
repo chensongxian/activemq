@@ -1,9 +1,8 @@
-package com.csx.activemq.p2p;
+package com.csx.activemq.pb;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
-import javax.swing.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,10 +12,6 @@ import javax.swing.*;
  * @Date: 2018-02-25
  */
 public class Consumer {
-    private final String SELECTOR_1 = "color = 'blue'";
-    private final String SELECTOR_2 = "color = 'blue' AND sal > 2000";
-    private final String SELECTOR_3 = "receiver = 'A'";
-
     private ConnectionFactory connectionFactory;
     private Connection connection;
     private Session session;
@@ -31,8 +26,8 @@ public class Consumer {
             this.connection = connectionFactory.createConnection();
             this.connection.start();
             this.session = this.connection.createSession(Boolean.FALSE, Session.AUTO_ACKNOWLEDGE);
-            this.destination = this.session.createQueue("first");
-            this.messageConsumer = this.session.createConsumer(destination,SELECTOR_1);
+            this.destination = this.session.createTopic("topic");
+            this.messageConsumer = this.session.createConsumer(destination);
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -50,17 +45,9 @@ public class Consumer {
         @Override
         public void onMessage(Message message) {
             try {
-                if (message instanceof TextMessage) {
-                    TextMessage textMessage= (TextMessage) message;
-                    System.out.println(textMessage.getText());
-                }
-
-                if (message instanceof MapMessage) {
-                    MapMessage ret = (MapMessage) message;
-                    System.out.println(ret.toString());
-                    System.out.println(ret.getString("name"));
-                    System.out.println(ret.getString("age"));
-                }
+                System.out.println("开始:");
+                TextMessage textMessage= (TextMessage) message;
+                System.out.println(textMessage.getText());
             } catch (JMSException e) {
                 e.printStackTrace();
             }
@@ -71,6 +58,5 @@ public class Consumer {
         Consumer consumer=new Consumer();
         consumer.receiver();
     }
-
 
 }
